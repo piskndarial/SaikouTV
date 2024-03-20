@@ -1,3 +1,5 @@
-# 1.1.1
+# 1.1.3
 
-- Fixed AllAnime
+- Updated AnimePahe and Gogo
+- Removed AnimeDao
+- Removed AllAnime (Crashes the entire app when selecting a server)

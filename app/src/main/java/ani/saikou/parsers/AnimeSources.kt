@@ -16,13 +16,13 @@ import ani.saikou.parsers.anime.Kaido
 
 object AnimeSources : WatchSources() {
     override val list: List<Lazier<BaseParser>> = lazyList(
-        "AllAnime" to ::AllAnime,
-        "AniWave" to ::AniWave,
-        "AnimeDao" to ::AnimeDao,
+//        "AllAnime" to ::AllAnime,
+//        "AniWave" to ::AniWave,
+//        "AnimeDao" to ::AnimeDao,
         "AnimePahe" to ::AnimePahe,
         "Gogo" to ::Gogo,
-        "Kaido" to ::Kaido,
-        "Marin" to ::Marin
+//        "Kaido" to ::Kaido,
+//        "Marin" to ::Marin
     )
 }
 

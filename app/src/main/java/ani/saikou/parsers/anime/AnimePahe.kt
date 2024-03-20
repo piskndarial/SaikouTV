@@ -14,9 +14,10 @@ class AnimePahe : AnimeParser() {
     override val name = "AnimePahe"
     override val saveName = "animepahe_ru"
     override val isDubAvailableSeparately = false
+    private var cookieHeader = "Cookie" to "__ddg1_=;__ddg2_=;XSRF-TOKEN="
 
     override suspend fun search(query: String): List<ShowResponse> {
-        val resp = client.get("$hostUrl/api?m=search&q=${encode(query)}").parsed<SearchQuery>()
+        val resp = client.get("$hostUrl/api?m=search&q=${encode(query)}", mapOf(cookieHeader)).parsed<SearchQuery>()
         return resp.data.map {
             val epLink = "$hostUrl/api?m=release&id=${it.session}&sort=episode_asc"
             ShowResponse(it.title, epLink, it.poster, extra = mapOf("t" to System.currentTimeMillis().toString()))
@@ -24,11 +25,11 @@ class AnimePahe : AnimeParser() {
     }
 
     override suspend fun loadEpisodes(animeLink: String, extra: Map<String, String>?): List<Episode> {
-        val resp = client.get(animeLink).parsed<ReleaseRouteResponse>()
+        val resp = client.get(animeLink, mapOf(cookieHeader)).parsed<ReleaseRouteResponse>()
         val releaseId = animeLink.substringAfter("&id=").substringBefore("&sort")
         return (1 until resp.lastPage + 1).map { i->
             val url = "$hostUrl/api?m=release&id=$releaseId&sort=episode_asc&page=$i"
-            client.get(url).parsed<ReleaseRouteResponse>().data!!.map { ep ->
+            client.get(url, mapOf(cookieHeader)).parsed<ReleaseRouteResponse>().data!!.map { ep ->
                 val kwikEpLink = "$hostUrl/play/${releaseId}/${ep.session}"
                 Episode(ep.episode.toString().substringBefore(".0"), kwikEpLink, ep.title, ep.snapshot)
             }
@@ -37,7 +38,7 @@ class AnimePahe : AnimeParser() {
 
     private val epRegex = Regex("(.+) · (.+)p \\((.+)MB\\) ?(.*)")
     override suspend fun loadVideoServers(episodeLink: String, extra: Any?): List<VideoServer> {
-        return client.get(episodeLink).document.select("#pickDownload > a").map {
+        return client.get(episodeLink, mapOf(cookieHeader)).document.select("#pickDownload > a").map {
             val (subgroup,quality,mb, audio) = epRegex.find(it.text())?.destructured!!
             VideoServer(
                 name = "$subgroup ${if(audio.isNotEmpty())"($audio) " else "" }- ${quality}p",
@@ -68,7 +69,7 @@ class AnimePahe : AnimeParser() {
         private val size = (data["size"] as String).toDoubleOrNull()
         private val ref = data["referer"] as String
 
-        private val redirectRegex = Regex("<a href=\"(.+?)\" .+?>Redirect me</a>")
+        private val redirectRegex = Regex("""\$\("a\.redirect"\)\.attr\("href","(https?://[^\"]+)"""")
         private val paramRegex = Regex("""\(\"(\w+)\",\d+,\"(\w+)\",(\d+),(\d+),(\d+)\)""")
         private val urlRegex = Regex("action=\"(.+?)\"")
         private val tokenRegex = Regex("value=\"(.+?)\"")

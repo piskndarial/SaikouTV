@@ -39,12 +39,10 @@ Saikou TV is crafted based on simplistic yet state-of-the-art elegance. It is an
 
 |               SITE                |    STATUS    |
 |:---------------------------------:|:------------:|
-|  [AllAnime](https://allanime.to)  |   WORKING    | 
 |   [Gogo](https://gogoanime.cl)    |   WORKING    |
 | [AnimePahe](https://animepahe.ru) |   WORKING    |
-|  [AnimeDao](https://animedao.bz)  |   WORKING    |
 
-(Source list updated as of 29/01/2024)
+(Source list updated as of 20/03/2024)
 
 
 ## WANT TO CONTRIBUTE?

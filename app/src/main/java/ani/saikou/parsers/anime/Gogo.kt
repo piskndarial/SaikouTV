@@ -16,7 +16,7 @@ import ani.saikou.parsers.anime.extractors.StreamSB
 class Gogo : AnimeParser() {
     override val name = "Gogo"
     override val saveName = "gogo_anime_hu"
-    override val hostUrl = "https://gogoanime.hu"
+    override val hostUrl = "https://anitaku.to"
     override val malSyncBackupName = "Gogoanime"
     override val isDubAvailableSeparately = true
 
@@ -28,7 +28,7 @@ class Gogo : AnimeParser() {
         val animeId = pageBody.select("input#movie_id").attr("value").toString()
 
         val epList = client
-            .get("https://ajax.gogo-load.com/ajax/load-list-episode?ep_start=0&ep_end=$lastEpisode&id=$animeId").document
+            .get("https://ajax.gogocdn.net/ajax/load-list-episode?ep_start=0&ep_end=$lastEpisode&id=$animeId").document
             .select("ul > li > a").reversed()
         epList.forEach {
             val num = it.select(".name").text().replace("EP", "").trim()
